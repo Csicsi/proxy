@@ -1,0 +1,17 @@
+services:
+  inspircd:
+    image: inspircd/inspircd-docker
+    ports:
+      - "6668:6667"
+    volumes:
+      - ./inspircd.conf:/inspircd/conf/inspircd.conf
+
+  proxy:
+    build: ./socat
+    depends_on:
+      - inspircd
+    ports:
+      - "6667:6667"
+    environment:
+      TARGET_HOST: inspircd
+      TARGET_PORT: 6667
